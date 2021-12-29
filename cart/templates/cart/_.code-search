@@ -1,0 +1,169 @@
+# Query: $
+# ContextLines: 1
+
+61 results - 10 files
+
+bookstore\settings.py:
+  23  # SECURITY WARNING: keep the secret key used in production secret!
+  24: SECRET_KEY = '#*k)9t8vzu)4j2hr=l@)emxs^ev%6z5)ri$q4g4%nb^n+pr37y'
+  25  
+
+cart\templates\cart\cart.html:
+  46  
+  47: 	$(document).ready(function(){
+  48  		summary();
+
+  51  	function summary(){
+  52: 		$.ajax({
+  53  			url : "summary",
+
+  55  			success : function(data){
+  56: 				$("#abc").html(data);
+  57  			}
+
+  60  	function updateCartItem(obj,id){
+  61: 		$.ajax({
+  62  			url: "update/"+id+"/"+obj.value,
+
+  68  			success	:function(data){
+  69: 				$("#"+(id.toString())).html(data);
+  70  				summary();
+
+cart\templates\cart\price.html:
+  1: {{ price }} Tk.
+
+cart\templates\cart\summary.html:
+  4  	<li class="list-group-item d-flex justify-content-between align-items-center">Books<span>{{ cart|length }}</span></li>
+  5: 	<li class="list-group-item d-flex justify-content-between align-items-center">Subtotal<span>{{ cart.get_total_price }} Tk.</span></li>
+  6: 	<li class="list-group-item d-flex justify-content-between align-items-center">Shipping<span>{{ cost|shipping }} Tk.</span></li>
+  7: 	<li class="list-group-item d-flex justify-content-between align-items-center">Payable Total<span>{{ cart.get_total_price|payabletotal}}Tk.</span></li>
+  8  </ul>	
+
+order\templates\order\details.html:
+  22  					                <td><a href="{% url 'store:book' id=item.book.id %}">{{ item.book.name }}</a></td>
+  23: 					                <td class="cart_quantity">{{ item.book.price }} Tk.</td>
+  24  					                <td class="cart_quantity">{{ item.quantity }}</td>
+  25: 					                <td>{{ item.book.price|subtotal:item.quantity }}Tk.</td>
+  26  					            </tr>
+
+  35  						<li class="list-group-item d-flex justify-content-between align-items-center">Books<span>{{ o_summary.totalbook }}</span></li>
+  36: 						<li class="list-group-item d-flex justify-content-between align-items-center">Subtotal<span>{{ o_summary.payable }} Tk.</span></li>
+  37: 						<li class="list-group-item d-flex justify-content-between align-items-center">Shipping<span>{{ 100 }} Tk.</span></li>
+  38: 						<li class="list-group-item d-flex justify-content-between align-items-center">Payable Total<span>{{ o_summary.payable|add:100 }} Tk.</span></li>
+  39  						<li class="list-group-item d-flex justify-content-between align-items-center">Order Data<span>{{ o_summary.created }}</span></li>
+
+order\templates\order\list.html:
+  20  			                <td><a href="{% url 'order:order_details' id=morder.id %}">#2018{{ morder.id }}</a></td>
+  21: 			                <td>{{ morder.payable }} Tk.</td>
+  22  			                <td>{{ morder.totalbook }}</td>
+
+order\templates\order\order.html:
+  66  						<li class="list-group-item d-flex justify-content-between align-items-center">Books<span>{{ cart|length }}</span></li>
+  67: 						<li class="list-group-item d-flex justify-content-between align-items-center">Subtotal<span>{{ cart.get_total_price }} Tk.</span></li>
+  68: 						<li class="list-group-item d-flex justify-content-between align-items-center">Shipping<span>{{ cost|shipping }} Tk.</span></li>
+  69: 						<li class="list-group-item d-flex justify-content-between align-items-center">Payable Total<span>{{ cart.get_total_price|payabletotal}} Tk.</span></li>
+  70  					</ul>
+
+store\static\js\main.js:
+    1: $(document).on('ready', function() {
+    2: 	$("body").on("click", "#addTocart", function(event){
+    3: 		var id = $(this).attr("data-book-id");
+    4  		event.preventDefault();
+    5: 		$.ajax({
+    6  			url : "../cart/add/"+id,
+
+    9  
+   10: 				$("#snackbar").html("Add To Cart");
+   11  				var x = document.getElementById("snackbar");
+
+   19  
+   20: 	$('#demo3').skdslider({
+   21  		delay:2000,
+
+   28  
+   29: 	$('#stars li').on('mouseover', function(){
+   30: 		var onStar = parseInt($(this).data('value'), 10); 
+   31  	   
+   32: 		$(this).parent().children('li.star').each(function(e){
+   33  		  if (e < onStar) {
+   34: 			$(this).addClass('hover');
+   35  		  }
+   36  		  else {
+   37: 			$(this).removeClass('hover');
+   38  		  }
+
+   40  	  }).on('mouseout', function(){
+   41: 		$(this).parent().children('li.star').each(function(e){
+   42: 		  $(this).removeClass('hover');
+   43  		});
+
+   45  	  
+   46: 	$('#stars li').on('click', function(){
+   47: 		var onStar = parseInt($(this).data('value'), 10); 
+   48: 		var stars = $(this).parent().children('li.star');
+   49  		
+   50  		for (i = 0; i < stars.length; i++) {
+   51: 		  $(stars[i]).removeClass('selected');
+   52  		}
+   53  		for (i = 0; i < onStar; i++) {
+   54: 		  $(stars[i]).addClass('selected');
+   55  		}
+   56: 		var ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
+   57  		var msg = "";
+
+   69  
+   70: 	  $('.responsive').slick({
+   71  	  dots: false,
+
+  118  	  
+  119: 	  $('.regulara').slick({
+  120  	  dots: false,
+
+  142  	  
+  143:     $(window).on('load', function() {
+  144:         $('.pre_loader').fadeOut('slow');
+  145:         $('.pre_loader').remove('slow');
+  146      });  
+
+  150  function totalCart(){
+  151: 	$.ajax({
+  152  		url: "../cart/totalcart",
+  153  		success: function(data){
+  154: 			$("#gettotalcart").html(data);
+  155  			console.log(data)
+
+  160  
+  161: $("input[name='qty']").TouchSpin({
+  162  	min: 1,
+
+  165  });
+  166: $('article').readmore({speed: 500});
+  167  
+
+store\templates\store\book.html:
+   40  							<div class="pricebox">
+   41: 								<p>Price: Tk. <span> {{ book.price }}</span></p>
+   42  								<button class="btn btn-warning" id="addTocart" data-book-id="{{ book.id }}">
+
+  138  <script type="text/javascript">
+  139: 	$(document).on('ready', function() {
+  140: 		$(document).on('click', '.lookInsideImg,.lookInsideBg', function (e) {
+  141: 			$('div.overlay').fadeIn(500);
+  142: 			$('div.lookInsideDiv').fadeIn(500);
+  143  		});
+  144  	   
+  145: 	   $(document).on('click', 'div.lookInsideDiv div.exitBtn', function () {
+  146: 			$('div.overlay').fadeOut(500);
+  147: 			$('div.lookInsideDiv').fadeOut(500);
+  148: 			refCaro($('#bookDR99'));
+  149  		});
+  150: 		$(document).on('click', 'div.overlay', function () {
+  151: 			$('div.overlay').fadeOut(500);
+  152: 			$('div.lookInsideDiv').fadeOut(500);
+  153: 			refCaro($('#bookDR99'));
+  154  			return false
+
+store\templates\store\category.html:
+  16  						</div>
+  17: 						<p> {{ item.price }} Tk. </p>
+  18  						<button class="btn btn-warning" id="addTocart" data-book-id="{{ item.id }}">
